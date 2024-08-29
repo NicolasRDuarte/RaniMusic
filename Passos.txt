@@ -1,0 +1,24 @@
+config git:
+git config --global user.name NicolasRDuarte
+git config --global user.email drnicolasribeiroduarte@gmail.com
+
+para criar o projeto:
+npx create-expo-app@latest RaniMusic --template blank
+
+cd RaniMusic
+
+Instalar os pactos necessários:
+npx expo install @react-native-community/slider
+npx expo install expo-av
+
+add o pacote para execução  na web
+npx expo install react-dom react-native-web @expo/metro-runtime
+
+abrir
+npx expo start
+
+abrir com emulador
+npx expo start --localhost --android
+
+restaurar projeto
+npm i
