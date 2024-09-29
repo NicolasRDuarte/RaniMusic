@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { StatusBar } from 'expo-status-bar'
 import {
+  Animated,
 	Dimensions,
-	FlatList,
 	Image,
 	SafeAreaView, 
 	StyleSheet,
@@ -17,25 +17,52 @@ import songs from "../model/data";
 const { width, height } = Dimensions.get('window')
 
 const MusicPlayer = () => {
+  const [songIndex, setSongIndex] = useState(0);
+
+  const songSlider = useRef(null);
+  const scrollX = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    scrollX.addListener(({value}) => {
+      const index = Math.round(value / width);
+      setSongIndex(index);
+    });
+  }, []);
 
   const renderSongs = ({ item, index }) => {
     return (
-      <View style={styles.mainImageWrapper}>
+      <Animated.View style={styles.mainImageWrapper}>
         <View style={[styles.imageWrapper, styles.elevation]}>
           <Image 
             source={item.artwork}
             style={styles.musicImage}
           />
         </View>
-      </View>
+      </Animated.View>
     )
   }
+
+  const skipToNext = () => {
+    songSlider.current.scrollToOffset({
+      offset: (songIndex + 1) * width
+    });
+  };
+
+  const skipToPrevious = () => {
+    songSlider.current.scrollToOffset({
+      offset: (songIndex - 1) * width
+    });
+  };
+
+  const handlePlayPause = async () => {
+
+  };
 
   return (
     <SafeAreaView style={styles.container}>
 			<View style={styles.main}>
 
-        <FlatList 
+        <Animated.FlatList 
           renderItem={renderSongs}
           data={songs}
           keyExtractor={item => item.id}
@@ -43,15 +70,24 @@ const MusicPlayer = () => {
           pagingEnabled
           showsHorizontalScrollIndicator={false}
           scrollEventThrottle={16}
-          onScroll={() => { }}
+          onScroll={Animated.event(
+            [
+              {
+                nativeEvent: {
+                  contentOffset: {x: scrollX},
+                },
+              },
+            ],
+            {useNativeDriver: true},
+          )}
         />
 
         <View>
           <Text style={[styles.songContent, styles.songTitle]}>
-            Titulo da Musica
+            {songs[songIndex].title}
           </Text>
           <Text style={[styles.songContent, styles.songArtist]}>
-            Autor da Musica
+            {songs[songIndex].artist}
           </Text>
         </View>
 
@@ -73,13 +109,13 @@ const MusicPlayer = () => {
         </View>
 
         <View style={styles.musicControlsContainer}>
-          <TouchableOpacity onPress={() => { }}>
+          <TouchableOpacity onPress={skipToPrevious}>
             <Ionicons name='play-skip-back-outline' size={35} color="#FFD369" />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => { }}>
+          <TouchableOpacity onPress={handlePlayPause}>
             <Ionicons name='pause-circle' size={75} color="#FFD369" />
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={skipToNext}>
             <Ionicons name='play-skip-forward-outline' size={35} color="#FFD369" />
           </TouchableOpacity>
         </View>

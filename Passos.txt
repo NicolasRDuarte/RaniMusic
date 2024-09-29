@@ -22,3 +22,8 @@ npx expo start --localhost --android
 
 restaurar projeto
 npm i
+
+2. Playlist
+
+3. Playlist
+Faz com que o nome da música corrente e de seu autor apraceça na tela 
