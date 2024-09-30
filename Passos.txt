@@ -27,3 +27,9 @@ npm i
 
 3. Playlist
 Faz com que o nome da música corrente e de seu autor apraceça na tela 
+
+4. Play-Pause
+Faz com que a música toque, e faz o botão play e pause funcionar
+
+5.Music Position
+Faz a barra de progresso funcionar e os minutos da música funcionar
